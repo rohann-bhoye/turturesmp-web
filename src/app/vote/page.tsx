@@ -1,4 +1,5 @@
 import PageShell from "@/components/PageShell";
+import Icon from "@/components/Icons";
 import { voteSites } from "@/data";
 
 export const metadata = { title: "Vote — Turture SMP" };
@@ -10,18 +11,18 @@ export default function Vote() {
     <PageShell title="Vote" intro="Vote every day to support the server and earn rewards in game." art="diamond">
       <div className="grid">
         {voteSites.map((v, i) => (
-          <div className="card vote" key={v.name}>
+          <div className="card vote" key={v.name} data-reveal>
             <span className="num pixel">{i + 1}</span>
             <h3>{v.name}</h3>
-            <p>🎁 {v.reward}</p>
-            <a className="btn primary sm-block" href={v.url} target="_blank" rel="noopener noreferrer">Vote now</a>
+            <p className="reward"><Icon name="gift" /> {v.reward}</p>
+            <a className="btn primary sm-block" href={v.url} target="_blank" rel="noopener noreferrer">Vote now <Icon name="arrow" /></a>
           </div>
         ))}
       </div>
-      <h2 className="pixel title sub">How it works</h2>
+      <h2 className="title sub" data-reveal>How it works</h2>
       <div className="steps three">
         {how.map((h, i) => (
-          <div className="step" key={h}>
+          <div className="card step" key={h} data-reveal>
             <span className="num pixel">{i + 1}</span>
             <p>{h}</p>
           </div>

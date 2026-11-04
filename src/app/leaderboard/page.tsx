@@ -13,7 +13,7 @@ export default function Leaderboard() {
         {[top[1], top[0], top[2]].filter(Boolean).map((p) => {
           const place = leaderboard.indexOf(p);
           return (
-            <div className={`card pod p${place + 1}`} key={p.player}>
+            <div className={`card pod p${place + 1}`} key={p.player} data-reveal>
               <span className="medal">{medals[place]}</span>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={`https://mc-heads.net/avatar/${encodeURIComponent(p.player)}/72`} alt="" width={72} height={72} />
@@ -23,7 +23,7 @@ export default function Leaderboard() {
           );
         })}
       </div>
-      <div className="card table-wrap">
+      <div className="card table-wrap" data-reveal>
         <table>
           <thead>
             <tr><th>#</th><th>Player</th><th>Playtime</th><th>Kills</th><th>Balance</th></tr>

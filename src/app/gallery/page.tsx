@@ -1,4 +1,5 @@
 import PageShell from "@/components/PageShell";
+import Icon from "@/components/Icons";
 import { gallery, galleryPlaceholders } from "@/data";
 
 export const metadata = { title: "Gallery — Turture SMP" };
@@ -9,16 +10,16 @@ export default function Gallery() {
       <div className="grid">
         {gallery.length > 0
           ? gallery.map((g) => (
-              <figure className="card shot" key={g.src}>
+              <figure className="card shot" key={g.src} data-reveal>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={g.src} alt={g.caption} loading="lazy" />
                 <figcaption>{g.caption}</figcaption>
               </figure>
             ))
           : galleryPlaceholders.map((c, i) => (
-              <figure className="card shot" key={c}>
-                <div className={`scene s${i % 6}`}>
-                  <span className="pixel">📷</span>
+              <figure className="card shot" key={c} data-reveal>
+                <div className={`scene-ph s${i % 6}`}>
+                  <Icon name="camera" />
                 </div>
                 <figcaption>{c} <span className="muted">· screenshot coming soon</span></figcaption>
               </figure>

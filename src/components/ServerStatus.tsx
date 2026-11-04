@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SERVER_IP } from "@/lib";
 
 type Status = { online: boolean; players?: { online: number; max: number }; version?: string; motd?: string };
@@ -44,16 +44,47 @@ export function StatusPill() {
   );
 }
 
+// Counts up to a number when it changes (instant for reduced-motion users).
+function CountUp({ value }: { value: number | string }) {
+  const [shown, setShown] = useState<number | string>(typeof value === "number" ? 0 : value);
+  const from = useRef(0);
+  useEffect(() => {
+    if (typeof value !== "number") {
+      setShown(value);
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(value);
+      return;
+    }
+    const start = from.current;
+    const t0 = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min((now - t0) / 1000, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const v = Math.round(start + (value - start) * eased);
+      from.current = v;
+      setShown(v);
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value]);
+  return <>{shown}</>;
+}
+
 export function StatsRow() {
   const s = useServerStatus();
+  const on = !!s?.online;
   return (
-    <div className="stats">
+    <div className="stats" data-reveal>
       <div className="stat">
-        <b>{s?.online ? s.players?.online ?? 0 : "—"}</b>
+        <b>{on ? <CountUp value={s?.players?.online ?? 0} /> : "—"}</b>
         <span>Players online</span>
       </div>
       <div className="stat">
-        <b>{s?.online ? s.players?.max ?? "—" : "—"}</b>
+        <b>{on && s?.players?.max != null ? <CountUp value={s.players.max} /> : "—"}</b>
         <span>Max slots</span>
       </div>
       <div className="stat">
