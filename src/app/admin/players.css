@@ -1,0 +1,75 @@
+/* Styles for Players, Bans & Mutes and the public appeal page. Reuses tokens from globals.css. */
+.pl-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 18px; }
+.pl-bar .field { flex: 1 1 220px; }
+.pl-bar .field.narrow { flex: 0 1 170px; }
+.pl-bar .btn { align-self: flex-end; }
+
+.pl-av { width: 32px; height: 32px; border-radius: 8px; image-rendering: pixelated; flex-shrink: 0; background: var(--surface-2); }
+.pl-name { display: flex; align-items: center; gap: 10px; min-width: 0; font-weight: 600; }
+.pl-name a:hover { color: var(--em); }
+.pl-table td, .pl-table th { white-space: nowrap; }
+.pl-table td.wrap { white-space: normal; min-width: 180px; max-width: 320px; overflow-wrap: anywhere; }
+
+.chips { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-block; padding: 1px 10px; border-radius: 99px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+.chip.on { background: color-mix(in srgb, var(--em) 20%, transparent); color: var(--em); }
+.chip.warn { background: color-mix(in srgb, var(--gold) 22%, transparent); color: var(--gold); }
+.chip.bad { background: color-mix(in srgb, var(--red) 20%, transparent); color: var(--red); }
+
+.pager { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 16px; }
+.pager .btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
+
+.tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 18px; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+.tabs a { display: inline-flex; gap: 8px; align-items: center; padding: 10px 16px; border-radius: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; border: 1px solid transparent; }
+.tabs a:hover { background: var(--surface); color: var(--text); }
+.tabs a.active { background: color-mix(in srgb, var(--em) 14%, transparent); color: var(--em); border-color: color-mix(in srgb, var(--em) 35%, transparent); }
+.tabs em { font-style: normal; font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--surface-2); color: var(--muted); }
+.tabs a.active em { background: color-mix(in srgb, var(--em) 24%, transparent); color: var(--em); }
+
+.revoke-form { display: flex; gap: 8px; align-items: center; }
+.revoke-form input { min-width: 150px; padding: 8px 12px; }
+
+.pd-head { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+.pd-head img { width: 64px; height: 64px; border-radius: 14px; image-rendering: pixelated; background: var(--surface-2); }
+.pd-head h1 { font-size: clamp(24px, 4vw, 34px); overflow-wrap: anywhere; }
+.pd-head .sub { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+.pd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 18px; margin-top: 22px; align-items: start; }
+.pd-card { display: grid; gap: 14px; align-content: start; }
+.pd-card h2 { font-size: 20px; }
+.pd-facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 14.5px; }
+.pd-facts dt { color: var(--muted); }
+.pd-facts dd { margin: 0; overflow-wrap: anywhere; }
+.pd-section { margin-top: 26px; }
+.pd-section > h2 { font-size: 22px; margin-bottom: 12px; }
+.pd-notes { display: grid; gap: 10px; list-style: none; }
+.pd-notes li { padding: 12px 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); white-space: pre-wrap; overflow-wrap: anywhere; }
+.pd-notes small { display: block; color: var(--muted); margin-bottom: 4px; }
+.pd-form { display: grid; gap: 14px; }
+.pd-form textarea { min-height: 90px; resize: vertical; }
+.pd-form .dur { display: flex; gap: 10px; }
+.pd-form .dur input { flex: 1 1 90px; }
+.pd-form .dur select { flex: 1 1 110px; }
+.btn.danger { background: color-mix(in srgb, var(--red) 22%, transparent); border-color: color-mix(in srgb, var(--red) 55%, transparent); color: var(--text); }
+.btn.danger:hover { background: color-mix(in srgb, var(--red) 34%, transparent); }
+
+.ap-list { display: grid; gap: 14px; }
+.ap-card { display: grid; gap: 12px; }
+.ap-card header { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+.ap-msg { padding: 12px 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); white-space: pre-wrap; overflow-wrap: anywhere; }
+.ap-actions { display: grid; gap: 10px; }
+.ap-actions .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.ap-actions textarea { min-height: 70px; resize: vertical; }
+
+.appeal-page { max-width: 760px; margin: 0 auto; display: grid; gap: 18px; }
+.appeal-page .pd-form textarea { min-height: 150px; }
+.counter { font-size: 12.5px; color: var(--muted); text-align: right; }
+
+@media (max-width: 640px) {
+  .pl-bar .field, .pl-bar .field.narrow { flex: 1 1 100%; }
+  .pl-bar .btn { width: 100%; }
+  .revoke-form { flex-direction: column; align-items: stretch; }
+  .revoke-form input { min-width: 0; }
+  .pd-facts { grid-template-columns: 1fr; gap: 0; }
+  .pd-facts dd { margin-bottom: 8px; }
+  .ap-actions .btns .btn { flex: 1 1 100%; }
+}
