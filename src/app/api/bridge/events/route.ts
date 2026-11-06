@@ -16,6 +16,15 @@ export async function POST(req: Request) {
     const playerUuid = uuid(p.uuid);
     const name = playerName(p.name);
     if (!playerUuid || !name) return bad("Punishment needs a valid uuid and name.");
+    // In-game /tsmp unban and /tsmp unmute: revoke the matching active punishments (mirror only, nothing is queued).
+    if (p.type === "unban" || p.type === "unmute") {
+      const kinds = p.type === "unban" ? ["ban", "tempban", "ipban"] : ["mute", "tempmute"];
+      await Punishment.updateMany(
+        { playerUuid, active: true, type: { $in: kinds } },
+        { $set: { active: false, revokedBy: str(p.issuedBy, 40) || "Console", revokedAt: new Date(), revokeReason: str(p.reason, 500) || "Revoked in game" } }
+      );
+      return json({ ok: true });
+    }
     if (typeof p.type !== "string" || !(PUNISH_TYPES as readonly string[]).includes(p.type)) return bad("Unknown punishment type.");
 
     const expiresAt = isoDate(p.expiresAt);

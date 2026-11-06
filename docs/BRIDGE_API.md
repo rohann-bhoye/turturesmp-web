@@ -15,7 +15,7 @@ The website rejects a missing/invalid signature (401) or a timestamp more than 5
 |---|---|---|
 | `POST /heartbeat` (every 30 s) | `{ version, mcVersion, software, maxPlayers, tps?, online: [{uuid,name,edition}] }` | `{ ok, settings: { whitelistEnabled, maintenanceMode, maintenanceMessage, allowBedrock } }` |
 | `POST /players/sync` (every 5 min and on quit) | `{ players: [{ uuid, name, edition, playtimeMinutes, kills, deaths, balance, rankKey, lastIp? }] }` | `{ ok, upserted }` |
-| `POST /events` | `{ type: "punishment", punishment: { type, uuid, name, reason, issuedBy, expiresAt?, ip? } }` (bans done in game are mirrored to the website) | `{ ok }` |
+| `POST /events` | `{ type: "punishment", punishment: { type, uuid, name, reason, issuedBy, expiresAt?, ip? } }` (bans done in game are mirrored to the website; `type` may also be `unban` or `unmute`, which revokes the active punishments) | `{ ok }` |
 | `GET /commands?limit=20` | - | `{ commands: [{ id, type, payload }] }` (marks them `sent`) |
 | `POST /commands/{id}/result` | `{ ok: boolean, message?: string }` | `{ ok }` |
 

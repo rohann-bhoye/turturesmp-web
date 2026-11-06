@@ -10,8 +10,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
   try {
-    const { expired } = await expireEntitlements();
-    return NextResponse.json({ ok: true, expired });
+    const { checked, revoked, failed } = await expireEntitlements();
+    return NextResponse.json({ ok: true, checked, revoked, failed });
   } catch (e) {
     console.error("[cron:expire] failed:", e instanceof Error ? e.message : "unknown");
     return NextResponse.json({ ok: false }, { status: 500 });
