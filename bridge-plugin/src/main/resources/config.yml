@@ -1,0 +1,28 @@
+# TurtureBridge configuration. Protocol: docs/BRIDGE_API.md in the website repository.
+
+# Base URL of the website, WITHOUT /api/bridge and without a trailing slash.
+# Use the exact final URL (https, correct host); redirects are not followed.
+url: ""
+
+# Shared secret. Must equal BRIDGE_SECRET on the website.
+secret: ""
+
+# Free-form name for this server (shown in /tsmp status and sent in the User-Agent).
+server-name: "Turture SMP"
+
+# Intervals. Values below the minimum are raised automatically.
+heartbeat-seconds: 30   # min 5
+poll-seconds: 5         # min 2
+sync-minutes: 5         # min 1
+
+# Prefix for broadcast commands coming from the website (& colour codes allowed).
+broadcast-prefix: "&6[Turture] &f"
+
+# Commands that muted players may not use (without the slash).
+muted-blocked-commands: [msg, tell, w, whisper, r, reply, me, say, mail, t]
+
+# Optional: map website tag keys (tag_set) to a display string for %turture_tag%.
+# Keys not listed here are returned as-is. & colour codes allowed.
+tags: {}
+#  founder: "&6[Founder]"
+#  builder: "&a[Builder]"
