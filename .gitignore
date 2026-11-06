@@ -9,3 +9,6 @@ install.log
 *.log
 
 *.tsbuildinfo
+
+# agent worktrees
+.claude/worktrees/
