@@ -6,3 +6,5 @@ export { ServerSettings } from "./ServerSettings";
 export { Rank, Tag } from "./Rank";
 export { Product, Coupon, Order, Entitlement, PRODUCT_TYPES, ORDER_STATUS } from "./Store";
 export { AuditLog } from "./AuditLog";
+export { BridgeCommand, COMMAND_TYPES } from "./BridgeCommand";
+export type { CommandType } from "./BridgeCommand";
