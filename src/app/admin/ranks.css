@@ -1,0 +1,57 @@
+/* Ranks & Tags admin. Imported by src/app/admin/ranks/page.tsx. */
+.rk-tabs { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
+.rk-tabs a { padding: 9px 20px; border-radius: 99px; color: var(--muted); font-weight: 600; border: 1px solid var(--border); background: var(--surface); white-space: nowrap; }
+.rk-tabs a:hover { color: var(--text); }
+.rk-tabs a.active { background: color-mix(in srgb, var(--em) 16%, transparent); color: var(--em); border-color: color-mix(in srgb, var(--em) 45%, transparent); }
+.rk-gap { margin-bottom: 14px; }
+
+.rk-table td:first-child { width: auto; color: var(--text); font-weight: 500; }
+.rk-table td:last-child { color: inherit; font-weight: inherit; }
+.rk-table td { vertical-align: middle; }
+.rk-flag { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 99px; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; background: var(--surface-2); color: var(--muted); }
+.rk-flag.def { background: color-mix(in srgb, var(--em) 20%, transparent); color: var(--em); }
+.rk-flag.staff { background: color-mix(in srgb, var(--gold) 22%, transparent); color: var(--gold); }
+.rk-actions { display: flex; gap: 8px; align-items: center; justify-content: flex-end; }
+.rk-actions form { display: contents; }
+.rk-danger { color: var(--red); border-color: color-mix(in srgb, var(--red) 40%, transparent); }
+
+.mc-text { font-family: "Courier New", ui-monospace, monospace; white-space: pre-wrap; }
+.rk-form { margin-top: 22px; }
+.rk-form .field > small { margin-top: 2px; }
+.rk-color { display: flex; gap: 8px; }
+.rk-color input[type="color"] { width: 46px; flex: 0 0 46px; padding: 3px; height: 44px; }
+.rk-preview { background: #1c1c1c; color: #eee; border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; overflow-wrap: anywhere; }
+.rk-preview .muted { color: #9a9a9a; }
+.rk-msg { color: #ddd; font-family: "Courier New", ui-monospace, monospace; }
+.rk-preview .mc-text { color: #fff; }
+.rk-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+.rk-chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 99px; border: 1px solid var(--border-2); background: var(--surface); cursor: pointer; position: relative; z-index: 1; font-weight: 600; }
+.rk-chip input { width: 16px; height: 16px; accent-color: var(--em); }
+.rk-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+.rk-form textarea { font-family: "Courier New", ui-monospace, monospace; font-size: 14px; resize: vertical; }
+
+.rk-search { display: flex; gap: 12px; align-items: flex-end; margin-bottom: 16px; }
+.rk-search .field { flex: 1; }
+.rk-results { display: flex; flex-direction: column; padding: 8px; margin-bottom: 16px; }
+.rk-results a { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 10px; position: relative; z-index: 1; }
+.rk-results a:hover, .rk-results a.active { background: color-mix(in srgb, var(--em) 12%, transparent); }
+.rk-assign { display: grid; gap: 18px; }
+.rk-assign h3 { margin: 0; }
+.rk-assign p { overflow-wrap: anywhere; }
+.rk-inline { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--border); }
+.rk-inline .field { flex: 1 1 160px; }
+.rk-inline .field.narrow { flex: 0 1 110px; }
+.rk-inline p { flex: 1 1 200px; margin: 0; }
+
+@media (max-width: 640px) {
+  .rk-table { min-width: 0; }
+  .rk-table thead { display: none; }
+  .rk-table tr { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; padding: 12px 6px; border-bottom: 1px solid var(--border); }
+  .rk-table td { border: 0; padding: 2px 8px; }
+  .rk-table td:first-child { grid-column: 1 / -1; }
+  .rk-table td[data-label]::before { content: attr(data-label) ": "; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+  .rk-table td.rk-actions { grid-column: 1 / -1; justify-content: flex-start; padding-top: 8px; }
+  .rk-table td[colspan] { grid-column: 1 / -1; }
+  .rk-search { flex-direction: column; align-items: stretch; }
+  .rk-buttons .btn { flex: 1; }
+}
