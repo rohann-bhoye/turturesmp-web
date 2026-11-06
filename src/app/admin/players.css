@@ -26,8 +26,8 @@
 .tabs em { font-style: normal; font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--surface-2); color: var(--muted); }
 .tabs a.active em { background: color-mix(in srgb, var(--em) 24%, transparent); color: var(--em); }
 
-.revoke-form { display: flex; gap: 8px; align-items: center; }
-.revoke-form input { min-width: 150px; padding: 8px 12px; }
+.revoke-form { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+.revoke-form input { width: 160px; min-width: 150px; padding: 8px 12px; }
 
 .pd-head { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
 .pd-head img { width: 64px; height: 64px; border-radius: 14px; image-rendering: pixelated; background: var(--surface-2); }
@@ -68,7 +68,7 @@
   .pl-bar .field, .pl-bar .field.narrow { flex: 1 1 100%; }
   .pl-bar .btn { width: 100%; }
   .revoke-form { flex-direction: column; align-items: stretch; }
-  .revoke-form input { min-width: 0; }
+  .revoke-form input { min-width: 0; width: 100%; }
   .pd-facts { grid-template-columns: 1fr; gap: 0; }
   .pd-facts dd { margin-bottom: 8px; }
   .ap-actions .btns .btn { flex: 1 1 100%; }

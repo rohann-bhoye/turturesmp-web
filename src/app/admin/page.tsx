@@ -45,7 +45,7 @@ export default async function Dashboard() {
           {bridgeOnline ? "TurtureBridge plugin connected" : "TurtureBridge plugin not connected yet"}
         </p>
         <p className="muted">
-          Player data, bans, ranks and store deliveries appear here once the bridge plugin is installed on the Minecraft server (next phase).
+          Player data, bans, ranks and store deliveries sync with the Minecraft server through the TurtureBridge plugin (see bridge-plugin/README.md).
         </p>
         {hasRole(user?.role, "admin") && <Link className="btn primary sm" style={{ marginTop: 14 }} href="/admin/settings">Open server settings</Link>}
       </div>
