@@ -1,0 +1,86 @@
+/* Store admin only. Reuses the admin look from globals.css (.card, .btn, .field, .settings, .notice, .table-wrap, .kpis). */
+
+.st { display: grid; gap: 18px; min-width: 0; }
+.st .card:hover { transform: none; box-shadow: none; border-color: var(--border-2); }
+.st h2 { font-size: 20px; margin: 0; }
+.st h3 { margin-bottom: 4px; }
+
+/* tabs */
+.st-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+.st-tabs a { white-space: nowrap; flex-shrink: 0; padding: 10px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-weight: 600; font-size: 15px; transition: background .2s, color .2s; }
+.st-tabs a:hover { color: var(--text); background: var(--surface-2); }
+.st-tabs a.on { background: color-mix(in srgb, var(--em) 14%, transparent); border-color: color-mix(in srgb, var(--em) 40%, transparent); color: var(--em); font-weight: 700; }
+
+.st-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.st-head > div { display: flex; gap: 10px; flex-wrap: wrap; }
+.st-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.st-actions form { display: contents; }
+.st-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.st-note { color: var(--muted); font-size: 14px; }
+.st-form { display: grid; gap: 18px; }
+.st textarea { min-height: 96px; resize: vertical; }
+.st input[type="color"] { padding: 4px; height: 46px; cursor: pointer; }
+.st select[multiple] { min-height: 120px; padding: 6px; }
+.st .field > small { color: var(--muted); font-size: 12.5px; }
+
+/* tables: undo the global first/last column styling meant for the leaderboard */
+.st table { min-width: 560px; }
+.st th, .st td { padding: 12px 14px; }
+.st td:first-child { width: auto; font-weight: 600; color: var(--text); }
+.st td:last-child { color: inherit; font-weight: inherit; }
+.st td small { color: var(--muted); }
+.st td .btn.sm { padding: 6px 12px; font-size: 13px; }
+.st-num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.st-nowrap { white-space: nowrap; }
+.st-empty { padding: 28px; text-align: center; color: var(--muted); }
+.st-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 8px; vertical-align: -1px; border: 1px solid var(--border-2); }
+.st-link { color: var(--em); font-weight: 700; }
+.st-link:hover { text-decoration: underline; }
+
+/* status chips */
+.st-chip { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+.st-chip.s-pending { background: color-mix(in srgb, var(--gold) 22%, transparent); color: var(--gold); }
+.st-chip.s-paid { background: rgba(88, 101, 242, .22); color: #8f9bff; }
+.st-chip.s-delivered, .st-chip.s-active { background: color-mix(in srgb, var(--em) 20%, transparent); color: var(--em); }
+.st-chip.s-failed, .st-chip.s-expired { background: color-mix(in srgb, var(--red) 20%, transparent); color: var(--red); }
+.st-chip.s-refunded, .st-chip.s-cancelled, .st-chip.s-archived, .st-chip.s-off { background: var(--surface-2); color: var(--muted); }
+.st-chip.s-featured { background: color-mix(in srgb, var(--gold) 22%, transparent); color: var(--gold); }
+
+/* buttons */
+.btn.st-danger { background: color-mix(in srgb, var(--red) 16%, transparent); border-color: color-mix(in srgb, var(--red) 45%, transparent); color: var(--red); }
+.btn.st-danger:hover { background: color-mix(in srgb, var(--red) 26%, transparent); }
+
+/* filters and pager */
+.st-filter { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.st-filter .field { flex: 1 1 180px; }
+.st-filter .field.narrow { flex: 0 1 170px; }
+.st-pager { display: flex; justify-content: space-between; gap: 10px; align-items: center; color: var(--muted); font-size: 14px; }
+
+/* overview bars */
+.st-bars { display: grid; gap: 10px; margin-top: 12px; }
+.st-bar { display: grid; grid-template-columns: 96px 1fr 44px; gap: 10px; align-items: center; font-size: 14px; }
+.st-bar i { display: block; height: 10px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.st-bar i b { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--em), var(--gold)); min-width: 3px; }
+.st-bar span:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* order detail */
+.st-dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 18px; margin: 0; }
+.st-dl dt { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+.st-dl dd { margin: 0; overflow-wrap: anywhere; }
+.st-log { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
+.st-log li { display: grid; grid-template-columns: 10px 1fr; gap: 10px; font-size: 14px; }
+.st-log li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; background: var(--em); }
+.st-log li.bad::before { background: var(--red); }
+.st-log small { color: var(--muted); display: block; }
+.st-pre { white-space: pre-wrap; overflow-wrap: anywhere; margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+.st-total td { font-weight: 800; }
+
+@media (max-width: 700px) {
+  .st-grid2 { grid-template-columns: 1fr; }
+  .st-dl { grid-template-columns: 1fr; gap: 2px; }
+  .st-dl dd { margin-bottom: 8px; }
+  .st-bar { grid-template-columns: 78px 1fr 40px; }
+  .st-actions .btn { flex: 1 1 auto; }
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
