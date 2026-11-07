@@ -571,7 +571,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--e
 .inline-form select { width: auto; padding: 8px 12px; }
 
 @media (max-width: 900px) {
-  .admin { grid-template-columns: minmax(0, 1fr); }
+  .admin { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); align-content: start; }
   .admin-main { padding-top: 22px; }
 
   /* top bar: hamburger + current page */
@@ -592,6 +592,11 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--e
 }
 @media (max-width: 700px) {
   .admin-main .hide-sm { display: none; }
+  /* tab bars wrap onto a second row instead of scrolling sideways */
+  .admin-main .st-tabs, .admin-main .rk-tabs, .admin-main .tabs { flex-wrap: wrap; overflow: visible; padding-bottom: 0; }
+  .admin-main .st-tabs a { padding: 9px 14px; font-size: 14.5px; }
+  .admin-main .rk-tabs a { padding: 8px 16px; }
+  .admin-main .tabs a { padding: 9px 12px; }
   .admin-main .role-chip { white-space: normal; text-align: center; line-height: 1.35; padding: 3px 10px; }
   .admin-main td:first-child { min-width: 150px; }
   .admin-main td small { overflow-wrap: anywhere; }
