@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/components/Icons";
 import AdminNav, { NavItem } from "@/components/admin/AdminNav";
+import AdminShell from "@/components/admin/AdminShell";
 import SetupChecklist from "@/components/admin/SetupChecklist";
 import { getCurrentUser, isConfigured } from "@/server/session";
 import { hasRole, isStaff } from "@/server/roles";
@@ -53,30 +54,34 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   ];
 
   return (
-    <div className="admin">
-      <aside className="admin-side">
-        <Link href="/" className="logo pixel">
-          <span className="logo-mark"><Icon name="pickaxe" /></span>
-          <b>ADMIN</b>
-        </Link>
-        <AdminNav items={items} />
-        <div className="admin-user">
-          {user.avatar ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={user.avatar} alt="" width={36} height={36} />
-          ) : (
-            <span className="av">{user.username[0]?.toUpperCase()}</span>
-          )}
-          <div>
-            <b>{user.username}</b>
-            <span className={`role-chip r-${user.role}`}>{user.role}</span>
+    <AdminShell
+      items={items}
+      side={
+        <>
+          <Link href="/" className="logo pixel">
+            <span className="logo-mark"><Icon name="pickaxe" /></span>
+            <b>ADMIN</b>
+          </Link>
+          <AdminNav items={items} />
+          <div className="admin-user">
+            {user.avatar ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={user.avatar} alt="" width={36} height={36} />
+            ) : (
+              <span className="av">{user.username[0]?.toUpperCase()}</span>
+            )}
+            <div>
+              <b>{user.username}</b>
+              <span className={`role-chip r-${user.role}`}>{user.role}</span>
+            </div>
+            <form action="/api/auth/logout" method="post">
+              <button className="btn ghost sm admin-signout">Sign out</button>
+            </form>
           </div>
-          <form action="/api/auth/logout" method="post">
-            <button className="icon-btn" aria-label="Sign out" title="Sign out"><Icon name="close" /></button>
-          </form>
-        </div>
-      </aside>
-      <section className="admin-main">{children}</section>
-    </div>
+        </>
+      }
+    >
+      {children}
+    </AdminShell>
   );
 }

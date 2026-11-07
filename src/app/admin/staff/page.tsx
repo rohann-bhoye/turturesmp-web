@@ -38,13 +38,13 @@ export default async function StaffPage({ searchParams }: { searchParams: Promis
       {error && <p className="notice err" role="alert">{error}</p>}
       <div className="card table-wrap">
         <table>
-          <thead><tr><th>User</th><th>Minecraft</th><th>Last login</th><th>Role</th></tr></thead>
+          <thead><tr><th>User</th><th className="hide-sm">Minecraft</th><th className="hide-sm">Last login</th><th>Role</th></tr></thead>
           <tbody>
             {users.map((u) => (
               <tr key={String(u._id)}>
                 <td>{u.username}<br /><small className="muted">{u.discordId}</small></td>
-                <td>{u.minecraft?.name || "—"}</td>
-                <td>{u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString("en-IN") : "—"}</td>
+                <td className="hide-sm">{u.minecraft?.name || "—"}</td>
+                <td className="hide-sm">{u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleString("en-IN") : "—"}</td>
                 <td>
                   {String(u._id) === me.id ? (
                     <span className={`role-chip r-${u.role}`}>{u.role} ({iAmMaster ? "master, you" : "you"})</span>
