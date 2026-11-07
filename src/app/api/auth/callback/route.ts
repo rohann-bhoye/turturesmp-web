@@ -5,7 +5,7 @@ import { SESSION_COOKIE, sessionCookieOptions, signSession } from "@/server/sess
 
 export const dynamic = "force-dynamic";
 
-const origin = (req: NextRequest) => process.env.SITE_URL || req.nextUrl.origin;
+const origin = (req: NextRequest) => (process.env.SITE_URL || req.nextUrl.origin).trim().replace(/\/+$/, "");
 // Only allow redirects to paths on this site.
 const safeNext = (n?: string) => (n && n.startsWith("/") && !n.startsWith("//") && !n.startsWith("/\\") ? n : "/admin");
 

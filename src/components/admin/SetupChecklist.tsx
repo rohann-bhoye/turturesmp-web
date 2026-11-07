@@ -26,7 +26,7 @@ export default function SetupChecklist() {
         ))}
       </ul>
       <p className="muted small">
-        In the Discord app, add this redirect URL: <code>{(process.env.SITE_URL || "https://your-site.com") + "/api/auth/callback"}</code>
+        In the Discord app, add this redirect URL: <code>{(process.env.SITE_URL || "https://your-site.com").trim().replace(/\/+$/, "") + "/api/auth/callback"}</code>
       </p>
     </div>
   );

@@ -3,7 +3,7 @@ import { randomBytes } from "crypto";
 
 export const dynamic = "force-dynamic";
 
-const origin = (req: NextRequest) => process.env.SITE_URL || req.nextUrl.origin;
+const origin = (req: NextRequest) => (process.env.SITE_URL || req.nextUrl.origin).trim().replace(/\/+$/, "");
 
 // Step 1: send the visitor to Discord's consent screen.
 export async function GET(req: NextRequest) {
