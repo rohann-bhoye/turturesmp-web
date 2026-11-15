@@ -1,0 +1,12 @@
+/* Admin > Limits. Mobile first: each rank is a card; inputs sit side by side when there is room. */
+.lm-lead { margin: -4px 0 18px; max-width: 70ch; }
+.lm-form { display: grid; gap: 16px; justify-items: start; }
+.lm-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; width: 100%; }
+.lm-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px 14px; align-items: end; padding: 14px 16px; border-left: 4px solid var(--c); }
+.lm-name { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lm-name i { width: 12px; height: 12px; border-radius: 3px; transform: rotate(45deg); background: var(--c); box-shadow: 0 0 12px var(--c); }
+@media (min-width: 760px) { .lm-row { grid-template-columns: minmax(160px, 1.2fr) repeat(3, 1fr); } .lm-name { grid-column: auto; } }
+.lm-snip { margin-top: 24px; display: grid; gap: 10px; }
+.lm-snip h2 { font-size: 20px; }
+.lm-snip pre { margin: 0; padding: 14px 16px; border-radius: 12px; background: var(--bg-2, #0a100e); border: 1px solid var(--border); overflow-x: auto; font: 14px/1.6 ui-monospace, Consolas, monospace; }
+.lm-snip code { padding: 1px 6px; border-radius: 6px; background: var(--surface-2); }

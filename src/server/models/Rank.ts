@@ -15,6 +15,8 @@ const RankSchema = new Schema(
     isStaff: { type: Boolean, default: false },
     isDefault: { type: Boolean, default: false },
     discordRoleId: String,
+    // Per-rank limits set on Admin > Limits (they are also written into `permissions` as nodes).
+    limits: { homes: Number, auctions: Number, jobs: Number },
     syncedAt: Date, // last time pushed to / pulled from the server
   },
   { timestamps: true }
