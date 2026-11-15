@@ -11,7 +11,10 @@ import SectionHead from "@/components/SectionHead";
 import Icon, { IconName } from "@/components/Icons";
 import Link from "next/link";
 import { BEDROCK_IP, BEDROCK_PORT, DISCORD_INVITE, SERVER_IP } from "@/lib";
-import { faq, news, rules } from "@/data";
+import { getSection } from "@/server/content";
+
+// News, FAQ and rules are edited in Admin > Site content; the page refreshes at most once a minute (and right after a save).
+export const revalidate = 60;
 
 const features: { i: IconName; t: string; d: string }[] = [
   { i: "pickaxe", t: "Vanilla+ Survival", d: "Classic survival you love, with small quality-of-life upgrades that keep it fun." },
@@ -29,7 +32,8 @@ const steps = [
   { n: "4", t: "Start Playing", d: "Spawn in, claim your land and begin your SMP story!" },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const [news, faq, rules] = await Promise.all([getSection("news"), getSection("faq"), getSection("rules")]);
   return (
     <>
       <Nav />
@@ -98,11 +102,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="container section" id="news">
+        {news.length > 0 && <section className="container section" id="news">
           <SectionHead eyebrow="News" title="Latest from the world" />
           <div className="grid">
-            {news.map((n) => (
-              <article className="card news" key={n.t} data-reveal>
+            {news.map((n, i) => (
+              <article className="card news" key={`${i}-${n.t}`} data-reveal>
                 <div className="news-top">
                   <span className="tag">{n.tag}</span>
                   <span className="muted">{n.date}</span>
@@ -112,7 +116,7 @@ export default function Home() {
               </article>
             ))}
           </div>
-        </section>
+        </section>}
 
         <section className="container section" id="community">
           <SectionHead eyebrow="Community" title="Join the family" sub="Chat, trade, get support and take part in events." />
@@ -121,8 +125,8 @@ export default function Home() {
             <div className="card rules" id="rules" data-reveal>
               <h3>Server Rules</h3>
               <ol>
-                {rules.slice(0, 5).map((r) => (
-                  <li key={r.t}>{r.t}. <span className="muted">{r.d}</span></li>
+                {rules.slice(0, 5).map((r, i) => (
+                  <li key={`${i}-${r.t}`}>{r.t}. <span className="muted">{r.d}</span></li>
                 ))}
               </ol>
               <Link className="btn primary sm" style={{ marginTop: 20 }} href="/rules">All rules <Icon name="arrow" /></Link>
@@ -130,17 +134,17 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="container section" id="faq">
+        {faq.length > 0 && <section className="container section" id="faq">
           <SectionHead eyebrow="FAQ" title="Questions? Answered." />
           <div className="faq">
-            {faq.map((f) => (
-              <details className="card" key={f.q} data-reveal>
+            {faq.map((f, i) => (
+              <details className="card" key={`${i}-${f.q}`} data-reveal>
                 <summary>{f.q}</summary>
                 <p>{f.a}</p>
               </details>
             ))}
           </div>
-        </section>
+        </section>}
 
         <section className="container section">
           <div className="final" data-reveal>

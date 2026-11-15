@@ -48,6 +48,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin/bans", label: "Bans & Mutes" },
     { href: "/admin/ranks", label: "Ranks & Tags" },
     { href: "/admin/store", label: "Store & Orders" },
+    ...(hasRole(user.role, "admin") ? [{ href: "/admin/content", label: "Site content" }] : []),
     ...(hasRole(user.role, "admin") ? [{ href: "/admin/settings", label: "Server settings" }] : []),
     ...(hasRole(user.role, "owner") ? [{ href: "/admin/staff", label: "Staff & roles" }] : []),
     ...(hasRole(user.role, "admin") ? [{ href: "/admin/audit", label: "Audit log" }] : []),
