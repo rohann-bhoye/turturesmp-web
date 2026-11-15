@@ -188,20 +188,36 @@ export async function deleteTag(formData: FormData) {
 }
 
 // ---------------------------------------------------------------- assign
+// The same actions are used from the Assign tab and from a player's page (/admin/players/<uuid>).
+// The player page sends a hidden "back" field; anything that is not exactly that path is ignored.
+const BACK_RE = /^\/admin\/players\/[0-9a-f-]{32,36}$/i;
+const backPath = (f: FormData) => {
+  const v = String(f.get("back") ?? "");
+  return BACK_RE.test(v) ? v : "";
+};
+function finish(back: string, saved: string, q: string, uuid: string): never {
+  if (back) {
+    revalidatePath(back);
+    return redirect(`${back}?saved=${saved}`);
+  }
+  return done("assign", { q, uuid });
+}
+
 async function loadPlayer(formData: FormData, q: string) {
   const uuid = text(formData, "uuid", 36);
-  const fail = (msg: string) => redirect(to("assign", { error: msg, ...(q ? { q } : {}) }));
+  const back = backPath(formData);
+  const fail = (msg: string) => redirect(back ? `${back}?error=${encodeURIComponent(msg)}` : to("assign", { error: msg, ...(q ? { q } : {}) }));
   if (!UUID_RE.test(uuid)) return fail("Invalid player.");
   await connectDB();
   const player = await Player.findOne({ uuid });
   if (!player) return fail("Player not found.");
-  return { player, q, fail };
+  return { player, q, fail, back };
 }
 
 export async function assignRank(formData: FormData) {
   const user = await requireRole("admin");
   const q = text(formData, "q", 16);
-  const { player, fail } = await loadPlayer(formData, q);
+  const { player, fail, back } = await loadPlayer(formData, q);
   const rankKey = text(formData, "rankKey", 32);
   if (!isValidKey(rankKey)) return fail("Choose a rank.");
   const rank = await Rank.findOne({ key: rankKey }).lean();
@@ -223,13 +239,13 @@ export async function assignRank(formData: FormData) {
   player.rankKey = rankKey; // optimistic; the plugin sync corrects it if the command fails
   await player.save();
   await audit(user, "rank.assign", player.name, { uuid: player.uuid, from: before, to: rankKey, expiresAt: expiresAt?.toISOString() ?? null });
-  return done("assign", { q, uuid: player.uuid });
+  return finish(back, "rank", q, player.uuid);
 }
 
 export async function removeRank(formData: FormData) {
   const user = await requireRole("admin");
   const q = text(formData, "q", 16);
-  const { player, fail } = await loadPlayer(formData, q);
+  const { player, fail, back } = await loadPlayer(formData, q);
   const current = player.rankKey;
   const def = await Rank.findOne({ isDefault: true }).lean();
   const fallback = def?.key ?? "default";
@@ -239,13 +255,13 @@ export async function removeRank(formData: FormData) {
   player.rankKey = fallback;
   await player.save();
   await audit(user, "rank.remove", player.name, { uuid: player.uuid, removed: current, now: fallback });
-  return done("assign", { q, uuid: player.uuid });
+  return finish(back, "rankremoved", q, player.uuid);
 }
 
 export async function setPlayerTag(formData: FormData) {
   const user = await requireRole("admin");
   const q = text(formData, "q", 16);
-  const { player, fail } = await loadPlayer(formData, q);
+  const { player, fail, back } = await loadPlayer(formData, q);
   const tagKey = text(formData, "tagKey", 32); // empty = clear
   if (tagKey) {
     if (!isValidKey(tagKey)) return fail("Invalid tag.");
@@ -258,5 +274,5 @@ export async function setPlayerTag(formData: FormData) {
   player.tagKey = tagKey || undefined;
   await player.save();
   await audit(user, tagKey ? "tag.assign" : "tag.clear", player.name, { uuid: player.uuid, from: before, to: tagKey || null });
-  return done("assign", { q, uuid: player.uuid });
+  return finish(back, tagKey ? "tag" : "tagcleared", q, player.uuid);
 }

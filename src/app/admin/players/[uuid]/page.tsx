@@ -3,13 +3,16 @@ import { notFound } from "next/navigation";
 import { connectDB } from "@/server/db";
 import { Player } from "@/server/models/Player";
 import { Punishment } from "@/server/models/Punishment";
+import { Rank, Tag } from "@/server/models/Rank";
 import { requireRole } from "@/server/guard";
 import { hasRole } from "@/server/roles";
 import { MAX_NOTE, MAX_REASON, canActOn, formatMinutes, isBanType, isValidUuid, showIp } from "@/server/players-util";
 import { defaultReason, expireStale, highestLinkedRole } from "../punish-core";
 import { addNote, punishPlayer, setWhitelist } from "../actions";
+import { assignRank, removeRank, setPlayerTag } from "../../ranks/actions";
 import { Avatar, PunishStatus, fmtDate } from "../ui";
 import "../../players.css";
+import "../../ranks.css";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Player — Admin" };
@@ -19,6 +22,10 @@ const SAVED: Record<string, string> = {
   note: "Note added.",
   whitelisted: "Whitelist add queued.",
   unwhitelisted: "Whitelist removal queued.",
+  rank: "Rank assigned and sent to the server.",
+  rankremoved: "Rank removed; the player is back on the default rank.",
+  tag: "Tag set and sent to the server.",
+  tagcleared: "Tag cleared.",
 };
 
 const TYPES: { v: string; label: string }[] = [
@@ -45,6 +52,11 @@ export default async function PlayerPage({ params, searchParams }: { params: Pro
   const history = await Punishment.find({ playerUuid: uuid }).sort({ createdAt: -1 }).limit(100).lean();
   const targetRole = await highestLinkedRole(player);
   const isMod = hasRole(me.role, "mod");
+  const isAdmin = hasRole(me.role, "admin");
+  const [ranks, tags] = isAdmin
+    ? await Promise.all([Rank.find().sort({ weight: -1 }).lean(), Tag.find({ active: true }).sort({ key: 1 }).lean()])
+    : [[], []];
+  const rankInfo = ranks.find((r) => r.key === (player.rankKey || "default"));
   const allowed = canActOn(me.role, targetRole);
   const reason = await defaultReason();
   const activeBan = history.some((h) => h.active && isBanType(h.type));
@@ -97,6 +109,51 @@ export default async function PlayerPage({ params, searchParams }: { params: Pro
             </form>
           )}
         </section>
+
+        {isAdmin && (
+          <section className="card pd-card rk-assign">
+            <h2>Rank &amp; tag</h2>
+            <p className="muted small">
+              Rank: <b>{rankInfo?.displayName ?? player.rankKey ?? "default"}</b> · Tag: <b>{player.tagKey ?? "none"}</b>
+            </p>
+
+            <form action={assignRank} className="rk-inline">
+              <input type="hidden" name="uuid" value={player.uuid} />
+              <input type="hidden" name="back" value={`/admin/players/${player.uuid}`} />
+              <label className="field"><span>Set rank</span>
+                <select name="rankKey" defaultValue={player.rankKey ?? ""} required>
+                  <option value="" disabled>Choose…</option>
+                  {ranks.map((r) => <option key={r.key} value={r.key}>{r.displayName} ({r.key})</option>)}
+                </select>
+              </label>
+              <label className="field"><span>Duration</span>
+                <select name="expiry" defaultValue="none"><option value="none">Permanent</option><option value="days">For N days</option></select>
+              </label>
+              <label className="field narrow"><span>Days</span><input name="days" type="number" min={1} max={3650} placeholder="30" /></label>
+              <button className="btn primary sm">Assign</button>
+            </form>
+
+            <form action={removeRank} className="rk-inline">
+              <input type="hidden" name="uuid" value={player.uuid} />
+              <input type="hidden" name="back" value={`/admin/players/${player.uuid}`} />
+              <p className="muted small">Remove their current rank and fall back to the default.</p>
+              <button className="btn ghost sm rk-danger">Remove rank</button>
+            </form>
+
+            <form action={setPlayerTag} className="rk-inline">
+              <input type="hidden" name="uuid" value={player.uuid} />
+              <input type="hidden" name="back" value={`/admin/players/${player.uuid}`} />
+              <label className="field"><span>Chat tag</span>
+                <select name="tagKey" defaultValue={player.tagKey ?? ""}>
+                  <option value="">No tag (clear)</option>
+                  {tags.map((t) => <option key={t.key} value={t.key}>{t.display} ({t.key})</option>)}
+                </select>
+              </label>
+              <button className="btn primary sm">Save tag</button>
+            </form>
+            {tags.length === 0 && <p className="muted small">No tags yet. Create them in <Link href="/admin/ranks?tab=tags">Ranks &amp; Tags</Link>.</p>}
+          </section>
+        )}
 
         <section className="card pd-card">
           <h2>Punish</h2>
