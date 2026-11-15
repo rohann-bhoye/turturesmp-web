@@ -613,3 +613,37 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--e
 
 /* tighter cells inside admin tables so wide tables fit without sideways scrolling */
 .admin-main th, .admin-main td { padding-left: 10px; padding-right: 10px; }
+
+/* live leaderboard (tabs, podium values, ranked list) */
+.lb-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 0 auto 30px; }
+.lb-tabs button { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-weight: 700; font-size: 15px; padding: 11px 18px; border-radius: 14px; border: 1px solid var(--border-2); background: var(--surface); color: var(--muted); cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s; }
+.lb-tabs button:hover { color: var(--text); border-color: color-mix(in srgb, var(--c) 65%, transparent); transform: translateY(-2px); }
+.lb-tabs button.on { color: #0b1210; background: linear-gradient(180deg, color-mix(in srgb, var(--c) 88%, #fff), var(--c)); border-color: var(--c); box-shadow: 0 12px 28px -12px var(--c); }
+.lb-ico { font-size: 17px; line-height: 1; }
+.lb-panel { animation: drop 0.35s var(--ease); }
+.lb-head { text-align: center; margin-bottom: 26px; }
+.lb-head h2 { font-size: clamp(24px, 3.4vw, 34px); color: var(--lb); }
+.lb-head p { margin-top: 6px; }
+.lb .pod h3 { font-size: 19px; overflow-wrap: anywhere; }
+.lb .pod.p1 { border-color: color-mix(in srgb, var(--lb) 60%, transparent); }
+.lb-val { font-family: Outfit, sans-serif; font-size: 24px; color: var(--lb); letter-spacing: 0.02em; margin-top: 4px; }
+.lb-chip { display: inline-block; width: fit-content; padding: 1px 10px; border-radius: 99px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c); background: color-mix(in srgb, var(--c) 16%, transparent); border: 1px solid color-mix(in srgb, var(--c) 42%, transparent); }
+.lb-dot { display: inline-block; width: 9px; height: 9px; margin-left: 8px; border-radius: 50%; background: var(--em); box-shadow: 0 0 10px var(--em); vertical-align: middle; }
+.lb-list { padding: 8px; }
+.lb-row { display: grid; grid-template-columns: 48px minmax(0, 2.4fr) repeat(4, minmax(78px, 1fr)); align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); transition: background 0.2s; }
+.lb-row:last-child { border-bottom: 0; }
+.lb-row:not(.lb-th):hover { background: var(--surface); }
+.lb-th { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.lb-pos { font-weight: 800; color: var(--muted); }
+.lb-who { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.lb-who img { border-radius: 8px; image-rendering: pixelated; flex: none; }
+.lb-who > span { display: grid; gap: 3px; min-width: 0; }
+.lb-who b { overflow-wrap: anywhere; }
+.lb-c { color: var(--muted); font-variant-numeric: tabular-nums; }
+.lb-c.act { color: var(--lb); font-weight: 800; }
+.lb-empty { display: grid; gap: 8px; text-align: center; padding: 40px 20px; max-width: 520px; margin: 0 auto; }
+@media (max-width: 720px) {
+  .lb-row { grid-template-columns: 34px minmax(0, 1fr) auto; }
+  .lb-c:not(.act) { display: none; }
+  .lb-tabs button { padding: 10px 14px; font-size: 14px; }
+}
