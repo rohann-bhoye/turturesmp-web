@@ -34,7 +34,7 @@ export default function LookFields(props: {
       <div className="row">
         <label className="field">
           <span>Prefix (use &amp;a style colour codes)</span>
-          <input name="prefix" value={prefix} onChange={(e) => setPrefix(e.target.value)} maxLength={64} placeholder="&6[Gold] " disabled={d} />
+          <input name="prefix" value={prefix} onChange={(e) => setPrefix(e.target.value)} maxLength={100} placeholder="&6[Gold] " disabled={d} />
         </label>
         <label className="field">
           <span>Suffix</span>

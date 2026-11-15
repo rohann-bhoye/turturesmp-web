@@ -36,7 +36,7 @@ export async function saveRank(formData: FormData) {
   if (!isValidKey(key)) return fail("Key must be 1 to 32 characters: lowercase letters, digits and underscore.");
   const displayName = text(formData, "displayName", 32);
   const color = text(formData, "color", 7);
-  const prefix = rawText(formData, "prefix", 64);
+  const prefix = rawText(formData, "prefix", 100);
   const suffix = rawText(formData, "suffix", 64);
   const weight = Number(String(formData.get("weight") ?? "").trim());
   const isStaff = formData.get("isStaff") === "on";
