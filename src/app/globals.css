@@ -129,7 +129,7 @@ code { background: var(--surface-2); border: 1px solid var(--border); padding: 2
 .logo b { background: linear-gradient(90deg, var(--text), var(--em)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .logo-by { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; color: var(--muted); opacity: 0.7; white-space: nowrap; }
 @media (max-width: 640px) {
-  .logo-by { display: none; }
+  .logo-by { font-size: 7px; opacity: 0.5; }
 }
 .links { display: flex; gap: 2px; align-items: center; font-weight: 500; font-size: 14.5px; }
 .links a:not(.btn) { position: relative; padding: 8px 12px; border-radius: 10px; color: var(--muted); transition: color 0.2s, background 0.2s; }
