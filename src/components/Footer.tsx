@@ -21,6 +21,7 @@ export default function Footer() {
           <Link href="/rules">Rules</Link>
           <Link href="/vote">Vote</Link>
           <Link href="/store">Store</Link>
+          <Link href="/downloads">Downloads</Link>
         </nav>
         <nav className="foot-col" aria-label="Community">
           <h4>Community</h4>

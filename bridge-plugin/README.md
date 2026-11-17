@@ -1,6 +1,6 @@
 # TurtureBridge
 
-Paper plugin (1.21.x, Java 21) that connects the Turture SMP website to the Minecraft server.
+Paper plugin (built against Paper API 1.21.4, Java 21) that connects the Turture SMP website to the Minecraft server.
 
 The plugin always calls the website; the website never connects in, so the server needs no open port.
 The protocol is defined in [`docs/BRIDGE_API.md`](../docs/BRIDGE_API.md) and is binding for both sides.
@@ -11,6 +11,7 @@ The protocol is defined in [`docs/BRIDGE_API.md`](../docs/BRIDGE_API.md) and is 
 |---|---|
 | Heartbeat | Every `heartbeat-seconds`: version, MC version, software, max players, TPS, online players (uuid, name, edition). The reply carries the website settings (maintenance, whitelist, Bedrock). |
 | Players sync | Every `sync-minutes`, 5 s after a join and on quit: playtime (minutes), kills, deaths, Vault balance, rank, last IP. |
+| GrimAC alerts | Optional GrimAPI flag integration. Repeated flags for one player/check are grouped and sent to the admin dashboard; no automatic punishment is applied. |
 | Command queue | Polls `GET /commands` every `poll-seconds`, executes every command type of the spec in order, reports `POST /commands/{id}/result`. |
 | Settings | Maintenance mode (kicks everyone without `turturebridge.bypass`/op, also players already online when it switches on), whitelist flag, `allowBedrock`. |
 | Mutes | `mutes.yml`; muted players cannot chat or use the commands listed in `muted-blocked-commands`. |
@@ -19,16 +20,16 @@ The protocol is defined in [`docs/BRIDGE_API.md`](../docs/BRIDGE_API.md) and is 
 
 ## Install
 
-1. Build (see below) or take `build/libs/TurtureBridge-1.0.0.jar` and put it into `plugins/`.
+1. Build (see below) or download `TurtureBridge-1.1.0.jar` and put it into `plugins/`.
 2. Start the server once, then edit `plugins/TurtureBridge/config.yml` (`url`, `secret`).
 3. Set the same secret as `BRIDGE_SECRET` on the website. Run `/tsmp reload` (or restart) and check `/tsmp status`.
 
 Optional plugins (all soft dependencies, nothing breaks without them):
-**LuckPerms** (ranks, tags, rank definitions), **Vault** + an economy plugin (balance), **PlaceholderAPI** (`%turture_tag%`), **Floodgate** (exact Bedrock detection; without it Bedrock players are recognised by their Floodgate-style UUID).
+**GrimAC** (flag alerts through GrimAPI 1.3.2.1; if its runtime API is unavailable, alerts are disabled with a warning), **LuckPerms** (ranks, tags, rank definitions), **Vault** + an economy plugin (balance), **PlaceholderAPI** (`%turture_tag%`), **Floodgate** (exact Bedrock detection; without it Bedrock players are recognised by their Floodgate-style UUID).
 
 ## Build
 
-Requires JDK 21 and access to Maven Central, `repo.papermc.io` and `repo.extendedclip.com`.
+Requires JDK 21 and access to Maven Central, `repo.papermc.io`, `repo.extendedclip.com` and `repo.grim.ac`.
 
 ```
 cd bridge-plugin
@@ -41,12 +42,15 @@ The jar is written to `build/libs/TurtureBridge-<version>.jar`. The Gradle wrapp
 
 | Key | Default | Meaning |
 |---|---|---|
-| `url` | `""` | Website base URL, no `/api/bridge`, no trailing slash. Must be the final URL (redirects are not followed because they would drop the signed body). |
+| `url` | `""` | Absolute HTTPS website base URL, no `/api/bridge`, no trailing slash. HTTP, user info, query strings, and fragments are rejected; the bridge remains idle for an invalid URL. Must be the final URL (redirects are not followed because they would drop the signed body). |
 | `secret` | `""` | Shared secret = `BRIDGE_SECRET` on the website. |
 | `server-name` | `Turture SMP` | Label used in `/tsmp status` and the User-Agent. |
 | `heartbeat-seconds` | `30` | Minimum 5. |
 | `poll-seconds` | `5` | Minimum 2. |
 | `sync-minutes` | `5` | Minimum 1. |
+| `anti-cheat.enabled` | `true` | Enable the optional GrimAC alert integration. |
+| `anti-cheat.threshold` | `5` | Flags for the same player and Grim check before one alert is sent (1–100). |
+| `anti-cheat.window-seconds` | `60` | Grouping window for flags (10–600 seconds). |
 | `broadcast-prefix` | `&6[Turture] &f` | Prefix of `broadcast` commands. |
 | `muted-blocked-commands` | `msg, tell, ...` | Commands blocked for muted players. |
 | `tags` | `{}` | Optional map tag key -> display text for `%turture_tag%`. |
@@ -103,6 +107,7 @@ Types sent: `ban`, `tempban`, `ipban`, `mute`, `tempmute`, and also `unban` / `u
 - A command id that is delivered again is not executed twice; the stored result is simply re-reported. Ban, unban, whitelist, rank and tag operations are idempotent anyway.
 - Every command handler runs inside a try/catch; a failing command only produces `ok:false`.
 - Before the first successful heartbeat no settings are applied (fail open: an unreachable website cannot lock players out).
+- GrimAC flag alerts are observational only; the bridge never changes Grim cancellation or punishment behavior.
 
 ## Not covered / limits
 

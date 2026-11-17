@@ -1,5 +1,5 @@
-import { Punishment, PUNISH_TYPES } from "@/server/models";
-import { bad, handle, ip, isObj, isoDate, json, playerName, str, uuid } from "../_util";
+import { AntiCheatAlert, Punishment, PUNISH_TYPES } from "@/server/models";
+import { bad, handle, ip, isObj, isoDate, json, num, playerName, str, uuid } from "../_util";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -9,6 +9,45 @@ type PunishType = (typeof PUNISH_TYPES)[number];
 export async function POST(req: Request) {
   return handle(req, async (body) => {
     if (!isObj(body)) return bad("Body must be a JSON object.");
+    if (body.type === "anticheat_alert") {
+      const a = body.alert;
+      if (!isObj(a)) return bad("'alert' must be an object.");
+
+      const eventId = uuid(a.eventId);
+      const playerUuid = uuid(a.playerUuid);
+      const name = playerName(a.playerName);
+      const checkName = str(a.checkName, 100);
+      const flagCount = num(a.flagCount, 1, 100);
+      const threshold = num(a.threshold, 1, 100);
+      const windowSeconds = num(a.windowSeconds, 10, 600);
+      if (!eventId || !playerUuid || !name || !checkName || flagCount === undefined
+          || flagCount !== a.flagCount || threshold === undefined || threshold !== a.threshold
+          || flagCount < threshold || windowSeconds === undefined || windowSeconds !== a.windowSeconds
+          || typeof a.cancelled !== "boolean") {
+        return bad("Anti-cheat alert fields are invalid.");
+      }
+
+      await AntiCheatAlert.updateOne(
+        { eventId },
+        {
+          $setOnInsert: {
+            eventId,
+            playerUuid,
+            playerName: name,
+            checkName,
+            verbose: str(a.verbose, 500),
+            flagCount,
+            threshold,
+            windowSeconds,
+            cancelled: a.cancelled,
+            serverName: str(a.serverName, 64) || "Minecraft server",
+          },
+        },
+        { upsert: true }
+      );
+      return json({ ok: true });
+    }
+
     if (body.type !== "punishment") return bad("Unknown event type.");
     const p = body.punishment;
     if (!isObj(p)) return bad("'punishment' must be an object.");

@@ -84,6 +84,19 @@ final class ApiClient {
         String u = url == null ? "" : url.trim();
         while (u.endsWith("/")) u = u.substring(0, u.length() - 1);
         if (u.endsWith("/api/bridge")) u = u.substring(0, u.length() - "/api/bridge".length());
+        if (!u.isEmpty()) {
+            try {
+                URI uri = URI.create(u);
+                if (!"https".equalsIgnoreCase(uri.getScheme()) || uri.getHost() == null
+                        || uri.getUserInfo() != null || uri.getRawQuery() != null || uri.getRawFragment() != null) {
+                    log.severe("Invalid bridge URL: 'url' must be an absolute HTTPS URL without user info, query, or fragment. Bridge will remain idle.");
+                    u = "";
+                }
+            } catch (IllegalArgumentException e) {
+                log.severe("Invalid bridge URL: " + e.getMessage() + ". Bridge will remain idle.");
+                u = "";
+            }
+        }
         this.baseUrl = u;
         this.secret = secret == null ? "" : secret.trim();
         this.userAgent = userAgent;

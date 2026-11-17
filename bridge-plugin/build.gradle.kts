@@ -3,12 +3,13 @@ plugins {
 }
 
 group = "org.turturesmp"
-version = "1.0.0"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/releases/")
+    maven("https://repo.grim.ac/snapshots")
 }
 
 dependencies {
@@ -18,6 +19,7 @@ dependencies {
     // Soft dependencies (optional at runtime, never shaded).
     compileOnly("net.luckperms:api:5.4")
     compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("ac.grim.grimac:GrimAPI:1.3.2.1")
     // Vault and Floodgate are accessed via reflection, so no compile dependency is needed.
 }
 

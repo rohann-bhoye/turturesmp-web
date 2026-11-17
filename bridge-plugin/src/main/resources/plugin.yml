@@ -2,9 +2,9 @@ name: TurtureBridge
 version: '${version}'
 main: org.turturesmp.bridge.TurtureBridge
 api-version: '1.21'
-description: Connects the Turture SMP website to this server (heartbeat, players, punishments, ranks, store commands).
+description: Connects the Turture SMP website to this server (players, moderation, store commands and GrimAC alerts).
 authors: [TurtureSMP]
-softdepend: [Vault, LuckPerms, PlaceholderAPI, floodgate]
+softdepend: [Vault, LuckPerms, PlaceholderAPI, floodgate, GrimAC]
 
 commands:
   tsmp:

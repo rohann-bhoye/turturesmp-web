@@ -15,6 +15,12 @@ heartbeat-seconds: 30   # min 5
 poll-seconds: 5         # min 2
 sync-minutes: 5         # min 1
 
+# GrimAC flags are grouped by player and check. Alerts do not punish players.
+anti-cheat:
+  enabled: true
+  threshold: 5
+  window-seconds: 60
+
 # Prefix for broadcast commands coming from the website (& colour codes allowed).
 broadcast-prefix: "&6[Turture] &f"
 

@@ -38,8 +38,10 @@ final class BridgeService {
     private final PunishmentStore store;
     private final PunishmentService punishments;
     private final BridgeCommands commands;
+    private final GrimFlagCollector grimFlags;
     private final OptionalHooks.Vault vault = new OptionalHooks.Vault();
     private final OptionalHooks.Floodgate floodgate = new OptionalHooks.Floodgate();
+    private boolean grimHookInitialized;
 
     private volatile LuckPermsHook luckPerms; // null when LuckPerms is absent
     private volatile BridgeSettings settings; // null until the first successful heartbeat
@@ -67,6 +69,7 @@ final class BridgeService {
         this.store = new PunishmentStore(plugin);
         this.punishments = new PunishmentService(log, store);
         this.commands = new BridgeCommands(plugin, this);
+        this.grimFlags = new GrimFlagCollector(this::postAntiCheatAlert);
     }
 
     // ---------------------------------------------------------------- accessors
@@ -115,6 +118,7 @@ final class BridgeService {
             }
         }
         applyConfig();
+        initializeGrimHook();
         if (!api.configured()) {
             log.warning("TurtureBridge is idle: set 'url' and 'secret' in plugins/TurtureBridge/config.yml, then run /tsmp reload.");
             return;
@@ -146,8 +150,30 @@ final class BridgeService {
         heartbeatMs = Math.max(5, c.getInt("heartbeat-seconds", 30)) * 1000L;
         pollMs = Math.max(2, c.getInt("poll-seconds", 5)) * 1000L;
         syncMs = Math.max(1, c.getInt("sync-minutes", 5)) * 60_000L;
+        grimFlags.configure(
+                c.getBoolean("anti-cheat.enabled", true),
+                c.getInt("anti-cheat.threshold", 5),
+                c.getInt("anti-cheat.window-seconds", 60)
+        );
         api.configure(c.getString("url", ""), c.getString("secret", ""),
                 "TurtureBridge/" + plugin.getPluginMeta().getVersion() + " (" + serverName + ")");
+    }
+
+    private void initializeGrimHook() {
+        if (grimHookInitialized) return;
+        grimHookInitialized = true;
+        if (Bukkit.getPluginManager().getPlugin("GrimAC") == null) {
+            log.info("GrimAC not found; anti-cheat alerts are disabled.");
+            return;
+        }
+        try {
+            GrimAlertHook.register(plugin, grimFlags);
+            log.info("GrimAC flag alerts registered"
+                    + (plugin.getConfig().getBoolean("anti-cheat.enabled", true) ? " (threshold " + grimFlags.threshold()
+                    + " per check in " + grimFlags.windowSeconds() + "s)." : " but disabled by config."));
+        } catch (LinkageError | RuntimeException e) {
+            log.log(Level.WARNING, "GrimAC is installed but its public API is unavailable; anti-cheat alerts are disabled.", e);
+        }
     }
 
     // ---------------------------------------------------------------- scheduling helpers
@@ -407,6 +433,25 @@ final class BridgeService {
         JsonObject body = new JsonObject();
         body.addProperty("type", "punishment");
         body.add("punishment", pun);
+        api.enqueue("/events", body.toString());
+    }
+
+    private void postAntiCheatAlert(GrimFlagCollector.Alert alert) {
+        if (!api.configured()) return;
+        JsonObject payload = new JsonObject();
+        payload.addProperty("eventId", alert.eventId().toString());
+        payload.addProperty("playerUuid", alert.playerUuid().toString());
+        payload.addProperty("playerName", alert.playerName());
+        payload.addProperty("checkName", alert.checkName());
+        payload.addProperty("verbose", alert.verbose());
+        payload.addProperty("flagCount", alert.flagCount());
+        payload.addProperty("threshold", alert.threshold());
+        payload.addProperty("windowSeconds", alert.windowSeconds());
+        payload.addProperty("cancelled", alert.cancelled());
+        payload.addProperty("serverName", serverName);
+        JsonObject body = new JsonObject();
+        body.addProperty("type", "anticheat_alert");
+        body.add("alert", payload);
         api.enqueue("/events", body.toString());
     }
 }

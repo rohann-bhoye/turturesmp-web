@@ -8,10 +8,9 @@ import ThemeToggle from "./ThemeToggle";
 
 const links = [
   ["Home", "/"],
-  ["Join", "/#join"],
-  ["Rules", "/rules"],
   ["Vote", "/vote"],
   ["Store", "/store"],
+  ["Downloads", "/downloads"],
   ["Leaderboard", "/leaderboard"],
   ["Gallery", "/gallery"],
   ["Team", "/team"],
