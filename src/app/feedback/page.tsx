@@ -31,7 +31,7 @@ export default function Feedback() {
 
           <textarea
             name="message"
-            rows="5"
+            rows={5}
             placeholder="What’s on your mind? Be as detailed as you like..."
             required
             className="feedback-input feedback-textarea"
