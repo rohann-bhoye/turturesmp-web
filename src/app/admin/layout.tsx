@@ -33,8 +33,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     return (
       <main className="auth-wrap">
         <div className="auth-card card">
-          <h1>No access</h1>
-          <p className="muted">You are signed in as {user.username}, but this account is not staff. Ask an Owner to give you a role.</p>
+          <h1>The admin chicken ate your permission slip.</h1>
+          <p className="muted">It laid an egg stamped “NO ACCESS.” You’re signed in as {user.username}, but you’re not on the staff list. Ask an Owner for a staff role—please don’t build a redstone chicken-launcher to appeal.</p>
           <form action="/api/auth/logout" method="post"><button className="btn ghost">Sign out</button></form>
           <Link className="muted back" href="/">← Back to website</Link>
         </div>
@@ -48,6 +48,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin/bans", label: "Bans & Mutes" },
     { href: "/admin/ranks", label: "Ranks & Tags" },
     { href: "/admin/store", label: "Store & Orders" },
+    { href: "/admin/feedback", label: "Feedback" },
     ...(hasRole(user.role, "admin") ? [{ href: "/admin/limits", label: "Limits" }] : []),
     ...(hasRole(user.role, "admin") ? [{ href: "/admin/content", label: "Site content" }] : []),
     ...(hasRole(user.role, "admin") ? [{ href: "/admin/settings", label: "Server settings" }] : []),

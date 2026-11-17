@@ -44,56 +44,41 @@ export default async function AdminFeedback() {
           <p className="muted">No feedback yet.</p>
         </div>
       ) : (
-        <div className="card">
-          <table className="admin-feedback-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Type</th>
-                <th>Player</th>
-                <th>Status</th>
-                <th>Message</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {feedbacks.map((f) => {
-                const statusColor: Record<string, string> = {
-                  open: "var(--gold)",
-                  read: "var(--muted)",
-                  closed: "var(--em)",
-                };
-                const repliedByName = f.repliedBy ? replyBy.get(String(f.repliedBy)) : null;
-                return (
-                  <tr key={String(f._id)}>
-                    <td style={{ color: "var(--muted)", fontSize: 12.5 }}>{new Date(f.createdAt).toLocaleDateString()}</td>
-                    <td><span style={{ textTransform: "capitalize", fontWeight: 600 }}>{f.type}</span></td>
-                    <td>{f.minecraftName || "Anonymous"}</td>
-                    <td>
-                      <span style={{ color: statusColor[f.status] || "var(--text)", fontWeight: 600, fontSize: 12 }}>{f.status}</span>
-                      {repliedByName && <i> by {repliedByName}</i>}
-                    </td>
-                    <td style={{ maxWidth: 420, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.message}</td>
-                    <td>
-                      <form
-                        action={`/admin/feedback/${String(f._id)}/status`}
-                        method="POST"
-                        style={{ display: "flex", gap: 6, flexWrap: "wrap" }}
-                      >
-                        <input type="hidden" name="id" value={String(f._id)} />
-                        <select name="status" defaultValue={f.status}>
-                          <option value="open">Open</option>
-                          <option value="read">Read</option>
-                          <option value="closed">Closed</option>
-                        </select>
-                        <button className="btn primary sm" type="submit">Save</button>
-                      </form>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="feedback-admin-list">
+          {feedbacks.map((f) => {
+            const repliedByName = f.repliedBy ? replyBy.get(String(f.repliedBy)) : null;
+            return (
+              <article className="card feedback-admin-item" key={String(f._id)}>
+                <div className="feedback-admin-heading">
+                  <div className="feedback-admin-meta">
+                    <span className={`feedback-admin-type type-${f.type}`}>{f.type}</span>
+                    <b>{f.minecraftName || "Anonymous"}</b>
+                    <time className="muted" dateTime={new Date(f.createdAt).toISOString()}>
+                      {new Date(f.createdAt).toLocaleString("en-IN")}
+                    </time>
+                  </div>
+                  <span className={`feedback-admin-status status-${f.status}`}>
+                    {f.status}{repliedByName ? ` by ${repliedByName}` : ""}
+                  </span>
+                </div>
+
+                <p className="feedback-admin-message">{f.message}</p>
+
+                <form action={`/admin/feedback/${String(f._id)}/status`} method="POST" className="feedback-status-form">
+                  <input type="hidden" name="id" value={String(f._id)} />
+                  <label>
+                    <span className="sr-only">Status for feedback from {f.minecraftName || "Anonymous"}</span>
+                    <select name="status" defaultValue={f.status}>
+                      <option value="open">Open</option>
+                      <option value="read">Read</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </label>
+                  <button className="btn primary sm" type="submit">Save status</button>
+                </form>
+              </article>
+            );
+          })}
         </div>
       )}
     </>
