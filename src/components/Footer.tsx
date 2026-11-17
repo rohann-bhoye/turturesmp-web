@@ -10,6 +10,7 @@ export default function Footer() {
           <span className="logo pixel">
             <span className="logo-mark"><Icon name="pickaxe" /></span>
             <b>TURTURE SMP</b>
+            <span className="logo-by">By BucketStudy</span>
           </span>
           <p>A friendly survival server for builders, explorers and friends. Java &amp; Bedrock.</p>
           <span className="mono">{SERVER_IP}</span>
@@ -26,6 +27,7 @@ export default function Footer() {
           <Link href="/leaderboard">Leaderboard</Link>
           <Link href="/gallery">Gallery</Link>
           <Link href="/team">Team</Link>
+          <Link href="/feedback">Feedback</Link>
           <a href={DISCORD_INVITE} target="_blank" rel="noopener noreferrer">Discord</a>
         </nav>
       </div>

@@ -15,6 +15,7 @@ const links = [
   ["Leaderboard", "/leaderboard"],
   ["Gallery", "/gallery"],
   ["Team", "/team"],
+  ["Feedback", "/feedback"],
 ];
 
 export default function Nav() {
@@ -34,6 +35,7 @@ export default function Nav() {
         <Link href="/" className="logo pixel" onClick={() => setOpen(false)}>
           <span className="logo-mark"><Icon name="pickaxe" /></span>
           <b>TURTURE</b>
+          <span className="logo-by">By BucketStudy</span>
         </Link>
         <nav className={open ? "links open" : "links"} aria-label="Main">
           {links.map(([l, h]) => (

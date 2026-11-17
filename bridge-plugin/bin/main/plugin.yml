@@ -1,0 +1,22 @@
+name: TurtureBridge
+version: '${version}'
+main: org.turturesmp.bridge.TurtureBridge
+api-version: '1.21'
+description: Connects the Turture SMP website to this server (heartbeat, players, punishments, ranks, store commands).
+authors: [TurtureSMP]
+softdepend: [Vault, LuckPerms, PlaceholderAPI, floodgate]
+
+commands:
+  tsmp:
+    description: Turture SMP staff commands (mirrored to the website).
+    usage: /tsmp <ban|tempban|ipban|unban|mute|unmute|reload|status> ...
+    permission: turturebridge.staff
+    aliases: [turture]
+
+permissions:
+  turturebridge.staff:
+    description: Use /tsmp moderation commands.
+    default: op
+  turturebridge.bypass:
+    description: Join during maintenance mode and when Bedrock is disallowed.
+    default: op
